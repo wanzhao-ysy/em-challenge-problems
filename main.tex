@@ -1,6 +1,6 @@
 \PassOptionsToPackage{no-math}{fontspec}
 
-\documentclass[12pt,a4paper,UTF8,fontset=fandol]{ctexart}
+\documentclass[12pt,a4paper,UTF8,fontset=lxgw]{ctexart}
 
 \usepackage{amsmath}
 \usepackage{amsthm}
@@ -56,11 +56,11 @@
         此外在静电单位制中电荷的单位还有另一个名字，即「Fr（Franklin）」，
         这是为了纪念美国科学家本杰明·富兰克林（Benjamin Franklin）在电学（特别是正负电荷概念）上的卓越贡献。
     }）。
-    本文将介绍不同单位制之间单位换算的基本原理和方法，并具体说明静电单位与库仑之间的换算关系。
+    本文将介绍不同单位制之间单位换算的基本原理和方法，并具体说明静电单位与库仑之间的换算关系，以及这个换算数值与光速之间的联系。
 \end{abstract}
 
 \section{引言}
-本文是作者在2026年春季学期「电磁学(H)」课程中，对老师提到的一个问题——即讨论静电单位（statC）与库仑（C）的关系——的一个详细解答。
+本文是作者在2026年春季学期「电磁学(H)」课程中，对\textbf{叶邦角} 教授提到的一个问题——即讨论静电单位（statC）与库仑（C）的关系——的一个详细解答。
 并且在此基础上，进一步探讨了单位制之间的转换方法。
 此外，这也是作者对于 \LaTeX 排版的一次练习，以锻炼自己的学术论文写作能力。
 
@@ -196,7 +196,7 @@
 \end{table}
 
 \section{关于此换算数值的意义}
-再计算出这个换算数值之后，我们会发现这个数值非常接近光速 $c$ 的数值（$c \approx \qty{2.99792e8}{m/s}$）。
+再计算出这个换算数值之后，我们会发现这个数值非常「接近」光速 $c$ 的数值（$c \approx \qty{2.99792e8}{m/s}$）。
 这激励我们去寻找这个数值与光速之间的联系。
 
 我们可以对比真空中两个点电荷之间的作用力公式：
@@ -229,7 +229,7 @@
 
 根据 CGS-ESU 的定义，此时的电荷量数值 $q_{ESU}$ 必须等于 1
 \begin{equation}
-    \qty{1}{dyn}= \frac{(\qty{1}{statC})^2}{(\qty{1}{cm}^2} \implies q_{ESU} = 1
+    \qty{1}{dyn}= \frac{(\qty{1}{statC})^2}{(\qty{1}{cm})^2} \implies q_{ESU} = \qty{1}{statC}
 \end{equation}
 
 在 SI 单位制下的同等表达
