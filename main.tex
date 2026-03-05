@@ -5,16 +5,40 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{unicode-math}
-\setmathfont{NewCMMath-Book.otf}
+\setmathfont{NewCMMath-Regular.otf}
 \usepackage{siunitx}
 \sisetup{inter-unit-product = \ensuremath{{}\cdot{}}}
+\usepackage{booktabs}
 
 \usepackage[
-    left=1.5cm,
-    right=1.5cm,
-    top=2cm,
+    left=2cm,
+    right=2cm,
+    top=3cm,
     bottom=2cm
 ]{geometry}
+
+\usepackage[
+    backend=biber,
+    style=gb7714-2015,
+    sorting=none,
+    backref=true
+]{biblatex}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=red,
+    citecolor=red,
+    urlcolor=red,
+    bookmarksnumbered=true,
+    pdfstartview=FitH
+}
+\usepackage{bookmark}
+\usepackage{cleveref}
+\crefname{equation}{公式}{公式}
+\Crefname{equation}{公式}{公式}
+
+\addbibresource{references.bib}
 
 \title{静电单位与库仑的换算 \\[1ex] \large
 \begin{flushright}
@@ -27,16 +51,218 @@
 \maketitle
 
 \begin{abstract}
-    在国际单位制（SI）中，电荷的单位是库仑（C），而在静电学（CGS-ESU）中，常用的单位是静电单位（statC）。
+    在国际单位制（SI）中，电荷的单位是库仑（C），而在静电单位制（CGS-ESU）中，常用的单位是静电单位（statC \footnote{
+        也称为 esu（electrostatic unit），不过「esu」一般用作称呼这个单位制本身，而 statC 则用作称呼这个单位。
+        此外在静电单位制中电荷的单位还有另一个名字，即「Fr（Franklin）」，
+        这是为了纪念美国科学家本杰明·富兰克林（Benjamin Franklin）在电学（特别是正负电荷概念）上的卓越贡献。
+    }）。
     本文将介绍不同单位制之间单位换算的基本原理和方法，并具体说明静电单位与库仑之间的换算关系。
 \end{abstract}
 
 \section{引言}
 本文是作者在2026年春季学期「电磁学(H)」课程中，对老师提到的一个问题——即讨论静电单位（statC）与库仑（C）的关系——的一个详细解答。
 并且在此基础上，进一步探讨了单位制之间的转换方法。
-此外，这也是作者对于\LaTeX 排版的一次练习，以锻炼自己的学术论文写作能力。
+此外，这也是作者对于 \LaTeX 排版的一次练习，以锻炼自己的学术论文写作能力。
 
+\section{关于物理量与单位}
+在物理学中，我们一般认为物理量由三个部分组成：数值、单位和误差。
+在理论分析中，我们通常关注数值和单位，而误差则在实验测量中更为重要。
 
+而对于「量纲」这个概念，其定义并不统一 \cite{liangcanbin2018}。
+但是「量纲」和「单位」这两个概念是有极强的关联的，为保持严谨，在下面的叙述中，我们只说「单位」，不说「量纲」。
 
+一般而言，我们把可以相互比较（测量）的量称为\textbf{同类量}，而作比的结果是一个实数，这个实数就是我们常说的「数值」。
+
+对于任意一个量 $\symbfit{A}$，所有与它同类的量的集合称为 $\symbfit{A}$ 的\textbf{量类}，记为 $\tilde{\symbfit{A}}$。
+例如，长度量类 $\tilde{\symbfit{L}}$，时间量类 $\tilde{\symbfit{T}}$，电荷量类 $\tilde{\symbfit{Q}}$ 等等。
+
+在量类 $\tilde{\symbfit{A}}$ 中选取（实际上可以随机选取）一个特定的量 $\hat{\symbfit{A}}$，
+并把它与 $\symbfit{A}$ 作比，设用 $\hat{\symbfit{A}}$ 测 $\symbfit{A}$ 得数为 $A$，则有同类量等式
+\begin{equation}
+    \symbfit{A} = A \hat{\symbfit{A}}
+    \label{eq:like-quantity-equality}
+\end{equation}
+这里的 $\hat{\symbfit{A}}$ 就是 $\symbfit{A}$ 的一个\textbf{单位}，而 $A$ 就是 $\symbfit{A}$ 的\textbf{数值}。
+
+如果改用另一个量 $\hat{\symbfit{A}}'$ 来测 $\symbfit{A}$，得到数值 $A'$，则有
+\begin{equation}
+    \symbfit{A} = A' \hat{\symbfit{A}}'
+    \label{eq:like-quantity-equality-2}
+\end{equation}
+
+设 $\hat{\symbfit{A}}$ 和 $\hat{\symbfit{A}}'$ 之间的换算关系为
+\begin{equation}
+    \hat{\symbfit{A}}' = \alpha \hat{\symbfit{A}}
+\end{equation}
+其中的 $\alpha$ 为实数。
+
+由 \cref{eq:like-quantity-equality} 和 \cref{eq:like-quantity-equality-2} 联立可得
+\begin{equation}
+    A \hat{\symbfit{A}} = A' \hat{\symbfit{A}}' = A' \alpha \hat{\symbfit{A}}
+\end{equation}
+从而可以得出数值之间的换算关系为
+\begin{equation}
+    A = \alpha A'
+\end{equation}
+
+如此我们有如下结论：用不同的单位测量同一个量，单位之比等于数值之比的倒数。
+这一结论可以用用公式表示为
+\begin{equation}
+    \frac{\hat{\symbfit{A}}'}{\hat{\symbfit{A}}} = \alpha = \frac{A}{A'}
+    \label{eq:unit-conversion}
+\end{equation}
+
+\section{静电单位制与国际单位制}
+
+\subsection{静电单位制（CGS-ESU）}
+静电单位制（CGS-ESU）是一种基于厘米-克-秒（CGS）系统的单位制，曾是电磁学领域中常用的单位制之一。
+\footnote{现在用高斯单位制的极少了，作者只知道的《伯克利物理学教程》和朗道的《理论物理学教程》系列曾用，
+    而且现在都因出版的需求而改用国际单位制了。}
+
+在静电单位制中，电荷的单位是静电单位（statC），其定义为：
+\begin{center}
+    \textbf{在真空中，两个相距 \qty{1}{cm} 的点电荷之间的库仑力为 \qty{1}{dyn} 时，}
+
+    \textbf{每个点电荷的电荷量为 \qty{1}{statC}。}
+\end{center}
+用公式表示为
+\begin{equation}
+    F = \frac{q_1 q_2}{r^2}
+\end{equation}
+其中 $F$ 是库仑力，$q_1$ 和 $q_2$ 是两个点电荷的电荷量，$r$ 是它们之间的距离。
+
+此处的 \qty{1}{dyn} 是力的单位，是 CGS 单位制中力的单位，由牛顿第二定律 $F = ma$ 可得
+\begin{equation}
+    \qty{1}{dyn} = \qty{1}{g} \cdot \qty{1}{cm/s^2} = \qty{1e-5}{N}
+\end{equation}
+
+\subsection{国际单位制（SI）}
+国际单位制（SI）是目前全球范围内最广泛使用的单位制，在 SI 单位制中，电荷的单位是库仑（C），它是电流的单位安培（A）与时间的单位秒（s）的乘积，即
+\begin{equation}
+    \qty{1}{C} = \qty{1}{A} \cdot \qty{1}{s}
+\end{equation}
+定义的。
+
+但得益于国际单位制的统一与标准化，我们不需要通过库仑的定义就能列出国际单位制中的库仑定律，即
+\begin{equation}
+    F = \frac{1}{4\pi \epsilon_0} \frac{q_1 q_2}{r^2}
+\end{equation}
+其中 $\epsilon_0$ 是真空介电常数，数值约为 \qty{8.854187817e-12}{F/m}。
+
+\section{静电单位与库仑的换算}
+根据静电单位制和国际单位制中电荷的定义，我们可以通过库仑定律来推导静电单位与库仑之间的换算关系。
+在静电单位制中，两个相距 \qty{1}{cm} 的点电荷之间的库仑力为 \qty{1}{dyn}。
+所以我们只需要计算在国际单位制中，两个相距 \qty{1}{cm} 的点电荷之间的库仑力为 \qty{1}{dyn} 时，每个点电荷的电荷量是多少库仑。
+
+根据国际单位制中的库仑定律，我们有
+\begin{equation}
+    F = \frac{1}{4\pi \epsilon_0} \frac{q_1 q_2}{r^2}
+\end{equation}
+将 $F$ 设为 $\qty{1}{dyn}=\qty{1e-5}{N}$，$r$ 设为 $\qty{1}{cm}=\qty{1e-2}{m}$，并且设 $q_1 = q_2 = q$，我们可以解出 $q$ 的数值，即
+\begin{equation}
+    \begin{aligned}
+        \qty{1e-5}{N} & = \frac{1}{4\pi \epsilon_0} \frac{q^2}{(\qty{1e-2}{m})^2}            \\
+        q^2           & = 4\pi \epsilon_0 \cdot \qty{1e-5}{N} \cdot (\qty{1e-2}{m})^2        \\
+        q             & = \sqrt{4\pi \epsilon_0 \cdot \qty{1e-5}{N} \cdot (\qty{1e-2}{m})^2} \\
+                      & \approx \qty{3.33564e-10}{C}
+    \end{aligned}
+\end{equation}
+
+根据我们之前的 \cref{eq:unit-conversion}，我们可以得出静电单位与库仑之间的换算关系为
+\begin{equation}
+    \qty{1}{statC} \approx \qty{3.33564e-10}{C}
+\end{equation}
+或者反过来
+\begin{equation}
+    \qty{1}{C} \approx \qty{2.99792e9}{statC}
+\end{equation}
+这就是我们所要证明的。
+
+用类似的方法，我们可以导出如下这张表格（其中出现的未解释的单位不必纠结）
+\begin{table}[htbp]
+    \centering
+    \caption{静电单位制 (CGS-ESU) 与国际单位制 (SI) 主要物理量换算表}
+    \label{tab:unit-conversion}
+    \begin{tabular}{lllll}
+        \toprule
+        物理量 (Quantity)        & 符号  & CGS-ESU 单位 & SI 单位 & 换算关系 (1 SI = $x$ ESU)        \\
+        \midrule
+        电荷 (Charge)           & $q$ & statC (Fr) & C     & $\approx \qty{2.99792e9}{}$  \\
+        电流 (Current)          & $I$ & statA      & A     & $\approx \qty{2.99792e9}{}$  \\
+        电势 (Potential)        & $V$ & statV      & V     & $\approx \qty{3.33564e-3}{}$ \\
+        电场强度 (Electric Field) & $E$ & statV/cm   & V/m   & $\approx \qty{3.33564e-5}{}$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\section{关于此换算数值的意义}
+再计算出这个换算数值之后，我们会发现这个数值非常接近光速 $c$ 的数值（$c \approx \qty{2.99792e8}{m/s}$）。
+这激励我们去寻找这个数值与光速之间的联系。
+
+我们可以对比真空中两个点电荷之间的作用力公式：
+
+在 SI 单位制中：
+\begin{equation}
+    F_{SI} = \frac{1}{4\pi \epsilon_0} \frac{q_{SI}^2}{r_{SI}^2}
+\end{equation}
+
+在 CGS-ESU 单位制中：
+\begin{equation}
+    F_{ESU} = \frac{q_{ESU}^2}{r_{ESU}^2}
+\end{equation}
+
+在 2019 年国际单位制重新定义之前（即本文讨论的经典背景），真空磁导率 $\mu_0$被精确定义为：
+\begin{equation}
+    \mu_0 = 4\pi \times \qty{1e-7}{H/m}
+\end{equation}
+
+而根据麦克斯韦方程组导出的电磁波波速公式，真空中光速 $c$、$\epsilon_0$ 与 $\mu_0$ 满足以下关系：
+\begin{equation}
+    c^2 = \frac{1}{\epsilon_0 \mu_0} \implies \frac{1}{4\pi \epsilon_0} = \frac{\mu_0 c^2}{4\pi} = 10^{-7} \cdot c^2\label{eq:key-relation}
+\end{equation}
+
+这一 \cref{eq:key-relation} 是连接力学单位（牛顿、米）与电学单位（库仑）的灵魂所在。
+它预示了电荷的本质与光速有着不可分割的联系。
+
+假设在真空中放置两个电荷量均为的点电荷，它们之间的距离为 $r$。
+我们设定一个特定的物理情景：使它们之间的库仑力 $F$ 恰好为 \qty{1}{dyn}，距离 $r$ 恰好为 \qty{1}{cm}。
+
+根据 CGS-ESU 的定义，此时的电荷量数值 $q_{ESU}$ 必须等于 1
+\begin{equation}
+    \qty{1}{dyn}= \frac{(\qty{1}{statC})^2}{(\qty{1}{cm}^2} \implies q_{ESU} = 1
+\end{equation}
+
+在 SI 单位制下的同等表达
+现在，我们用 SI 单位 来表达这同一个物理情景。进行单位转换后，代入 SI 形式的库仑定律：
+\begin{equation}
+    10^{-5} = \frac{1}{4\pi \epsilon_0} \frac{q_{SI}^2}{(10^{-2})^2}
+\end{equation}
+
+引入光速 $c$ 进行代换
+利用我们在第一部分讨论的关系式 ，代入上式：
+\begin{equation}
+    10^{-5} = (10^{-7} c^2) \cdot \frac{q_{SI}^2}{10^{-4}}
+\end{equation}
+
+整理方程，求解 $q_{SI}$（即 \qty{1}{statC} 对应的库仑数）：
+\begin{equation}
+    \begin{aligned}
+        10^{-5} & = 10^{-3} \cdot c^2 \cdot q_{SI}^2 \\q_{SI}^2 &= \frac{10^{-5}}{10^{-3} c^2} = \frac{10^{-2}}{c^2} \\q_{SI} &= \sqrt{\frac{10^{-2}}{c^2}} = \frac{1}{10c}
+    \end{aligned}
+\end{equation}
+
+将真空中光速的数值 $c \approx \qty{2.99792458e8}{m/s}$ 代入：
+\begin{equation}
+    q_{SI} = \frac{1}{10 \times 2.99792458 \times 10^8} \approx 3.33564 \times 10^{-10} \text{ C}
+\end{equation}
+
+因此，单位换算关系为：
+\begin{equation}
+    \qty{1}{C} = \frac{1}{q_{SI}} \unit{statC} \approx 2.99792 \times 10^9 \text{ statC}
+\end{equation}
+
+这个数值恰好是光速 $c$ 在国际单位制中的数值的10倍。
+
+\printbibliography
 
 \end{document}
